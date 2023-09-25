@@ -12,7 +12,8 @@ class RMCharacterCollectionViewCell: UICollectionViewCell {
     
     private let imageView: UIImageView = {
        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -37,28 +38,43 @@ class RMCharacterCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubviews(imageView,nameLable,statusLable)
+        addConstraint()
+        setUpLayer()
     }
     
     required init(coder: NSCoder) {
         fatalError("unsupported")
     }
     
+    private func setUpLayer(){
+        contentView.layer.cornerRadius = 8
+        contentView.layer.shadowColor = UIColor.label.cgColor
+        contentView.layer.cornerRadius = 4
+        contentView.layer.shadowOffset = CGSize(width: -4, height: 4)
+        contentView.layer.shadowOpacity = 0.3
+    }
+    
     private  func addConstraint() {
         NSLayoutConstraint.activate([
-            statusLable.heightAnchor.constraint(equalToConstant: 40),
-            nameLable.heightAnchor.constraint(equalToConstant: 40),
-            statusLable.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5),
-            statusLable.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5),
-            nameLable.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5),
-            nameLable.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5),
+            statusLable.heightAnchor.constraint(equalToConstant: 30),
+            nameLable.heightAnchor.constraint(equalToConstant: 30),
+            statusLable.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 7),
+            statusLable.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -7),
+            nameLable.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 7),
+            nameLable.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -7),
             statusLable.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -3),
-            nameLable.bottomAnchor.constraint(equalTo: statusLable.topAnchor, constant: -3),
+            nameLable.bottomAnchor.constraint(equalTo: statusLable.topAnchor),
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.bottomAnchor.constraint(equalTo: nameLable.topAnchor,constant: -3),
             imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             imageView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             
         ])
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        setUpLayer()
     }
     
     override func prepareForReuse() {
